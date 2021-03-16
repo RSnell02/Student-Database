@@ -28,7 +28,7 @@ namespace Student_Database_Application
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(global::DataBaseTest.Properties.Settings.Default.Database1ConnectionString);
+            SqlConnection cn = new SqlConnection(global::Student_Database_Application.Properties.Settings.Default.Database1ConnectionString);
             try
             {
                 string sql = "INSERT INTO student (StudentID, FName, LName, Year, City, State) values(" + txtStuID.Text + ",'" + txtFName.Text + ",'" + txtLName.Text + ",'" + txtYear.Text + ",'" + txtCity.Text + ",'" + txtState.Text + "')";
@@ -51,7 +51,19 @@ namespace Student_Database_Application
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            SqlConnection cn = new SqlConnection(global::Student_Database_Application.Properties.Settings.Default.Database1ConnectionString);
+            try
+            {
 
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+
+            }
         }   // End btnSearch_Click
 
         private void btnRefresh_Click(object sender, EventArgs e)
