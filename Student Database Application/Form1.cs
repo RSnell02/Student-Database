@@ -19,6 +19,10 @@ namespace Student_Database_Application
             InitializeComponent();
         }
 
+        SqlConnection conn;
+        SqlCommand comm;
+        SqlDataReader sqlreader;
+        string connstring = "server = localhost; database = student";
         private void Form1_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'database1DataSet.student' table. You can move, or remove it, as needed.
@@ -28,42 +32,55 @@ namespace Student_Database_Application
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(global::Student_Database_Application.Properties.Settings.Default.Database1ConnectionString);
+            conn = new SqlConnection(connstring);
+            conn.Open();
+            comm = new SqlCommand("INSERT INTO student (StudentID, FName, LName, Year, City, State) values(" + txtStuID.Text + ",'" + txtFName.Text + ",'" + txtLName.Text + ",'" + txtYear.Text + ",'" + txtCity.Text + ",'" + txtState.Text + "')", conn);
+
             try
             {
-                string sql = "INSERT INTO student (StudentID, FName, LName, Year, City, State) values(" + txtStuID.Text + ",'" + txtFName.Text + ",'" + txtLName.Text + ",'" + txtYear.Text + ",'" + txtCity.Text + ",'" + txtState.Text + "')";
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cn.Open();
-                cmd.ExecuteNonQuery();
-
+                comm.ExecuteNonQuery();
                 MessageBox.Show("New student added", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.studentTableAdapter.Fill(this.database1DataSet.student);
             }   // End try
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error, student not saved.....", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }   // End catch
             finally
             {
-                cn.Close();
+                conn.Close();
             }   // End finally
         }   // End btnAdd_Click
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(global::Student_Database_Application.Properties.Settings.Default.Database1ConnectionString);
+            conn = new SqlConnection(connstring);
+            conn.Open();
+            comm = new SqlCommand("SELECT * FROM student(StudentID, fName, LName, Year, City, State)  WHERE StudentID =" + txtStuID.Text + ",", conn);
             try
             {
-
-            }
+                sqlreader = comm.ExecuteReader();
+                if (sqlreader.Read())
+                {
+                    txtFName.Text = sqlreader[1].ToString();
+                    txtLName.Text = sqlreader[2].ToString();
+                    txtYear.Text = sqlreader[3].ToString();
+                    txtCity.Text = sqlreader[4].ToString();
+                    txtState.Text = sqlreader[5].ToString();
+                }
+                else
+                {
+                    MessageBox.Show(" No Record");
+                }
+                sqlreader.Close();
+            }   // End try
             catch (Exception ex)
             {
-
-            }
+                MessageBox.Show(ex.Message, "No Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }   // End catch
             finally
             {
-
-            }
+                conn.Close();
+            }   // End finallh
         }   // End btnSearch_Click
 
         private void btnRefresh_Click(object sender, EventArgs e)
